@@ -79,7 +79,7 @@ export function App() {
 
             {/* Right Column: Content */}
 
-            <div className="relative w-full max-w-2xl mx-auto lg:mx-0 order-2 lg:order-1">
+            <div className="relative w-full mx-auto lg:mx-0 order-2 lg:order-1">
               <div className="absolute inset-0 bg-gradient-to-tr from-primary/5 to-secondary/5 rounded-full blur-3xl -z-10" />
               <InteractiveMap activeRegion="GHAA" />
             </div>
