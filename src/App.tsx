@@ -31,7 +31,7 @@ export function App() {
       {/* Main Content */}
       <main className="">
         {/* Hero Section */}
-        <section className="max-w-screen-2xl mx-auto px-4 lg:px-8 xl:px-12  py-12 md:py-24 lg:py-32">
+        <section className="max-w-screen-2xl mx-auto px-4 lg:px-8 xl:px-12 py-12 md:py-24 lg:py-32">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Left Column: Map */}
             <div className="space-y-8 text-center lg:text-left ">

@@ -61,14 +61,42 @@ export function InteractiveMap({ activeRegion, onRegionClick }: InteractiveMapPr
         const baseClass = "fill-accent hover:fill-secondary transition-colors duration-300 cursor-pointer";
         const activeClass = "fill-primary hover:fill-secondary transition-colors duration-300 cursor-pointer";
 
-        // Inject base class into all paths
-        processed = processed.replace(/<path/g, `<path class="${baseClass}"`);
+        // Region mapping based on user input
+        const regionMap: { [key: number]: { id: string, name: string } } = {
+            1: { id: "AHAFO", name: "Ahafo" },
+            3: { id: "ASHANTI", name: "Ashanti" },
+            4: { id: "BONO_EAST", name: "Bono East" }, // User said "BRONG AHAFO", usually implies the split. Using Bono East for 4 as 5 is Bono.
+            5: { id: "BONO", name: "Bono" },
+            6: { id: "CENTRAL", name: "Central" },
+            7: { id: "EASTERN", name: "Eastern" },
+            8: { id: "GREATER_ACCRA", name: "Greater Accra" },
+            9: { id: "NORTHERN", name: "Northern" },
+            10: { id: "NORTH_EAST", name: "North East" },
+            11: { id: "OTI", name: "Oti" },
+            12: { id: "SAVANNAH", name: "Savannah" },
+            13: { id: "UPPER_WEST", name: "Upper West" },
+            14: { id: "UPPER_EAST", name: "Upper East" },
+            15: { id: "VOLTA", name: "Volta" },
+            17: { id: "WESTERN", name: "Western" },
+            19: { id: "WESTERN_NORTH", name: "Western North" }
+        };
+
+        // Inject base class and IDs into all paths
+        let regionCount = 0;
+        processed = processed.replace(/<path/g, () => {
+            regionCount++;
+            const region = regionMap[regionCount];
+            if (region) {
+                return `<path id="${region.id}" name="${region.name}" class="${baseClass}"`;
+            }
+            // For unmapped paths (islands/fragments), keep them generic or just styled without ID
+            return `<path class="${baseClass}"`;
+        });
 
         // Handle active region if specified
         if (activeRegion) {
-            // We look for the path that now has the base class and the matching ID
-            const activeRegex = new RegExp(`<path class="${baseClass}"([^>]*?)id="${activeRegion}"`, "g");
-            processed = processed.replace(activeRegex, `<path class="${activeClass}"$1id="${activeRegion}"`);
+            const activeRegex = new RegExp(`<path id="${activeRegion}"([^>]*?)class="${baseClass}"`, "g");
+            processed = processed.replace(activeRegex, `<path id="${activeRegion}"$1class="${activeClass}"`);
         }
 
         return processed;
@@ -87,8 +115,11 @@ export function InteractiveMap({ activeRegion, onRegionClick }: InteractiveMapPr
                 // Event delegation for clicks
                 const target = e.target as HTMLElement;
                 const path = target.closest('path');
-                if (path && path.id && onRegionClick) {
-                    onRegionClick(path.id);
+                if (path) {
+                    console.log("Clicked Region:", path.id, path.getAttribute('name'));
+                    if (path.id && onRegionClick) {
+                        onRegionClick(path.id);
+                    }
                 }
             }}
         />
