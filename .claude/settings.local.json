@@ -11,7 +11,8 @@
       "WebFetch(domain:www.talk-prep.com)",
       "WebFetch(domain:prepdaily.org)",
       "WebFetch(domain:www.iwantprepnow.co.uk)",
-      "Bash(bun add:*)"
+      "Bash(bun add:*)",
+      "Bash(bun -e:*)"
     ],
     "deny": [],
     "ask": []

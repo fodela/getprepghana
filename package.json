@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "bun --hot src/index.tsx",
     "start": "NODE_ENV=production bun src/index.tsx",
-    "build": "bun run build.ts && bun run src/db/seed.ts"
+    "build": "bun run build.ts && bun run src/db/setup.ts && bun run src/db/seed.ts"
   },
   "dependencies": {
     "@radix-ui/react-dropdown-menu": "^2.1.16",
