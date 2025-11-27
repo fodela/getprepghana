@@ -133,6 +133,89 @@ export function RegionModal({ isOpen, onClose, regionId, regionName, pathData }:
         return { x, y };
     };
 
+    // Calculate label positions to avoid overlap
+    const getLabelLayout = () => {
+        const layout: { [key: number]: { x: number, y: number, anchor: string } } = {};
+
+        // Sort facilities by latitude (top to bottom in SVG Y)
+        // We want to process them in a stable order
+        const sorted = [...facilities].sort((a, b) => b.latitude - a.latitude);
+
+        const placedLabels: { x: number, y: number, width: number, height: number }[] = [];
+        const LABEL_HEIGHT = 20;
+        const LABEL_WIDTH_EST = 100; // Estimate
+
+        sorted.forEach(facility => {
+            const { x, y } = projectPoint(facility.latitude, facility.longitude);
+
+            // Potential positions relative to pin (x, y)
+            // 1. Top (default): y - 12
+            // 2. Bottom: y + 24
+            // 3. Right: x + 12
+            // 4. Left: x - 12
+
+            const positions = [
+                { x: x, y: y - 12, anchor: "middle", type: 'top' },
+                { x: x, y: y + 24, anchor: "middle", type: 'bottom' },
+                { x: x + 12, y: y + 4, anchor: "start", type: 'right' },
+                { x: x - 12, y: y + 4, anchor: "end", type: 'left' }
+            ];
+
+            let bestPos = positions[0];
+
+            // Simple collision check
+            for (const pos of positions) {
+                let collision = false;
+                // Define bounding box for this potential label position
+                // This is rough estimation
+                let bx = pos.x;
+                if (pos.anchor === "middle") bx -= LABEL_WIDTH_EST / 2;
+                if (pos.anchor === "end") bx -= LABEL_WIDTH_EST;
+
+                const by = pos.y - LABEL_HEIGHT / 2; // Centered vertically on pos.y roughly
+
+                for (const placed of placedLabels) {
+                    // Check intersection
+                    if (
+                        bx < placed.x + placed.width &&
+                        bx + LABEL_WIDTH_EST > placed.x &&
+                        by < placed.y + placed.height &&
+                        by + LABEL_HEIGHT > placed.y
+                    ) {
+                        collision = true;
+                        break;
+                    }
+                }
+
+                if (!collision) {
+                    bestPos = pos;
+                    break;
+                }
+            }
+
+            // Fallback to first position if all collide, or if bestPos is somehow undefined (though it starts as positions[0])
+            if (!bestPos) bestPos = positions[0];
+
+            // Record placement
+            let finalBx = bestPos.x;
+            if (bestPos.anchor === "middle") finalBx -= LABEL_WIDTH_EST / 2;
+            if (bestPos.anchor === "end") finalBx -= LABEL_WIDTH_EST;
+
+            placedLabels.push({
+                x: finalBx,
+                y: bestPos.y - LABEL_HEIGHT / 2,
+                width: LABEL_WIDTH_EST,
+                height: LABEL_HEIGHT
+            });
+
+            layout[facility.id] = { x: bestPos.x, y: bestPos.y, anchor: bestPos.anchor };
+        });
+
+        return layout;
+    };
+
+    const labelLayout = getLabelLayout();
+
     if (!isOpen) return null;
 
     return (
@@ -149,6 +232,8 @@ export function RegionModal({ isOpen, onClose, regionId, regionName, pathData }:
                         {isZoomed && facilities.map((facility, index) => {
                             const { x, y } = projectPoint(facility.latitude, facility.longitude);
                             const isSelected = selectedFacility?.id === facility.id;
+                            const layout = labelLayout[facility.id] || { x, y: y - 12, anchor: "middle" };
+
                             return (
                                 <g
                                     key={facility.id}
@@ -168,9 +253,9 @@ export function RegionModal({ isOpen, onClose, regionId, regionName, pathData }:
                                         style={{ animationDelay: `${index * 150}ms`, animationFillMode: 'both' }}
                                     />
                                     <text
-                                        x={x}
-                                        y={y - 12}
-                                        textAnchor="middle"
+                                        x={layout.x}
+                                        y={layout.y}
+                                        textAnchor={layout.anchor as "middle" | "start" | "end"}
                                         className="fill-foreground font-bold select-none pointer-events-none drop-shadow-md text-2xl bg-background animate-in fade-in duration-700"
                                         style={{ textShadow: '0px 0px 3px rgba(255, 255, 255, 0.8)', animationDelay: `${index * 150 + 200}ms`, animationFillMode: 'both' }}
                                     >
