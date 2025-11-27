@@ -161,7 +161,7 @@ export function RegionModal({ isOpen, onClose, regionId, regionName, pathData }:
                 { x: x - 12, y: y + 4, anchor: "end", type: 'left' }
             ];
 
-            let bestPos = positions[0];
+            let bestPos = positions[0]!;
 
             // Simple collision check
             for (const pos of positions) {
@@ -194,7 +194,7 @@ export function RegionModal({ isOpen, onClose, regionId, regionName, pathData }:
             }
 
             // Fallback to first position if all collide, or if bestPos is somehow undefined (though it starts as positions[0])
-            if (!bestPos) bestPos = positions[0];
+            if (!bestPos) bestPos = positions[0]!;
 
             // Record placement
             let finalBx = bestPos.x;

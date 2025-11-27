@@ -12,7 +12,9 @@
       "WebFetch(domain:prepdaily.org)",
       "WebFetch(domain:www.iwantprepnow.co.uk)",
       "Bash(bun add:*)",
-      "Bash(bun -e:*)"
+      "Bash(bun -e:*)",
+      "Bash(cat:*)",
+      "Bash(curl:*)"
     ],
     "deny": [],
     "ask": []
