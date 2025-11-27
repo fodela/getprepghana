@@ -96,14 +96,14 @@ export function RegionModal({ isOpen, onClose, regionId, regionName, pathData }:
                                         cy={y}
                                         r={isSelected ? "10" : "6"}
                                         className={`stroke-white stroke-2 transition-all duration-300 group-hover:r-8 ${facility.drug_status === 'out' ? 'fill-red-500' :
-                                                facility.drug_status === 'low' ? 'fill-yellow-500' : 'fill-primary'
+                                            facility.drug_status === 'low' ? 'fill-yellow-500' : 'fill-primary'
                                             } ${isSelected ? 'stroke-4 shadow-lg' : ''}`}
                                     />
                                     <text
                                         x={x}
                                         y={y - 12}
                                         textAnchor="middle"
-                                        className="fill-foreground text-xs font-bold select-none pointer-events-none drop-shadow-md bg-background"
+                                        className="fill-foreground  font-bold select-none pointer-events-none drop-shadow-md text-4xl bg-background"
                                         style={{ textShadow: '0px 0px 3px rgba(255, 255, 255, 0.8)' }}
                                     >
                                         {facility.address}
@@ -144,8 +144,8 @@ export function RegionModal({ isOpen, onClose, regionId, regionName, pathData }:
                                     <h2 className="text-2xl font-bold text-primary mb-2">{selectedFacility.name}</h2>
                                     <div className="flex items-center gap-2 mb-4">
                                         <span className={`px-3 py-1 rounded-full text-sm font-medium ${selectedFacility.drug_status === 'available' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' :
-                                                selectedFacility.drug_status === 'low' ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400' :
-                                                    'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
+                                            selectedFacility.drug_status === 'low' ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400' :
+                                                'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
                                             }`}>
                                             {selectedFacility.drug_status === 'available' ? 'PrEP Available' : selectedFacility.drug_status === 'low' ? 'Low Stock' : 'Out of Stock'}
                                         </span>
@@ -211,8 +211,8 @@ export function RegionModal({ isOpen, onClose, regionId, regionName, pathData }:
                                     <div className="flex justify-between items-start mb-2">
                                         <h4 className="font-bold text-lg group-hover:text-primary transition-colors">{facility.name}</h4>
                                         <span className={`px-2 py-1 rounded-full text-xs font-medium ${facility.drug_status === 'available' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' :
-                                                facility.drug_status === 'low' ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400' :
-                                                    'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
+                                            facility.drug_status === 'low' ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400' :
+                                                'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
                                             }`}>
                                             {facility.drug_status === 'available' ? 'In Stock' : facility.drug_status === 'low' ? 'Low Stock' : 'Out of Stock'}
                                         </span>
