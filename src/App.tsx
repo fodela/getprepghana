@@ -29,15 +29,15 @@ export function App() {
       </nav>
 
       {/* Main Content */}
-      <main className="flex-1">
+      <main className="">
         {/* Hero Section */}
-        <section className=" mx-auto px-4 py-12 md:py-24 lg:py-32">
+        <section className="max-w-screen-2xl mx-auto px-4 lg:px-8 xl:px-12  py-12 md:py-24 lg:py-32">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Left Column: Map */}
-            <div className="space-y-8 text-center lg:text-left order-1 lg:order-2">
+            <div className="space-y-8 text-center lg:text-left ">
               <div className="space-y-4">
                 <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-primary">
-                  Stay HIV <span className="text-secondary">negative.</span>
+                  Stay HIV <span className="text-secondary">Negative.</span>
                 </h1>
                 <p className="text-xl md:text-2xl text-muted-foreground font-medium">
                   PrEP prevents HIV.
@@ -79,9 +79,9 @@ export function App() {
 
             {/* Right Column: Content */}
 
-            <div className="relative w-full mx-auto lg:mx-0 order-2 lg:order-1">
-              <div className="absolute inset-0 bg-gradient-to-tr from-primary/5 to-secondary/5 rounded-full blur-3xl -z-10" />
-              <InteractiveMap activeRegion="GHAA" />
+            <div className="flex items-center justify-center">
+              <div className=" rounded-full blur-3xl -z-10" />
+              <InteractiveMap activeRegion="EASTERN" />
             </div>
           </div>
         </section>
@@ -90,7 +90,7 @@ export function App() {
       {/* Footer */}
       <footer className="border-t border-border/40 bg-muted/30">
         <div className=" mx-auto px-4 py-8 text-center text-muted-foreground text-sm">
-          <p>&copy; {new Date().getFullYear()} PrEP Ghana. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} GetPrEPGhana. All rights reserved.</p>
         </div>
       </footer>
     </div>
