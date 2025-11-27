@@ -1,4 +1,3 @@
-import { NextResponse } from "next/server";
 import db from "../../../db";
 
 export async function GET(request: Request) {
@@ -26,9 +25,9 @@ export async function GET(request: Request) {
         const stmt = db.prepare(query);
         const facilities = stmt.all(...params);
 
-        return NextResponse.json(facilities);
+        return Response.json(facilities);
     } catch (error) {
         console.error("Database error:", error);
-        return NextResponse.json({ error: "Failed to fetch facilities" }, { status: 500 });
+        return Response.json({ error: "Failed to fetch facilities" }, { status: 500 });
     }
 }
