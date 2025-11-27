@@ -83,7 +83,7 @@ export function App() {
               <div className="flex items-center justify-center">
                 <div className=" rounded-full blur-3xl -z-10" />
                 <InteractiveMap
-                  activeRegion="GREATER_ACCRA"
+                  activeRegion="EASTERN"
                   onRegionClick={handleRegionClick}
                 />
               </div>

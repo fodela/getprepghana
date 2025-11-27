@@ -152,8 +152,7 @@ export function RegionModal({ isOpen, onClose, regionId, regionName, pathData }:
                             return (
                                 <g
                                     key={facility.id}
-                                    className="cursor-pointer group animate-in zoom-in fade-in slide-in-from-bottom-4 duration-500"
-                                    style={{ animationDelay: `${index * 150}ms`, animationFillMode: 'both' }}
+                                    className="cursor-pointer group"
                                     onClick={(e) => {
                                         e.stopPropagation();
                                         setSelectedFacility(facility);
@@ -165,14 +164,15 @@ export function RegionModal({ isOpen, onClose, regionId, regionName, pathData }:
                                         r={isSelected ? "10" : "6"}
                                         className={`stroke-white stroke-2 transition-all duration-300 group-hover:r-8 ${facility.drug_status === 'out' ? 'fill-red-500' :
                                             facility.drug_status === 'low' ? 'fill-yellow-500' : 'fill-primary'
-                                            } ${isSelected ? 'stroke-4 shadow-lg' : ''}`}
+                                            } ${isSelected ? 'stroke-4 shadow-lg' : ''} animate-in zoom-in fade-in slide-in-from-bottom-4 duration-500`}
+                                        style={{ animationDelay: `${index * 150}ms`, animationFillMode: 'both' }}
                                     />
                                     <text
                                         x={x}
                                         y={y - 12}
                                         textAnchor="middle"
-                                        className="fill-foreground  font-bold select-none pointer-events-none drop-shadow-md text-4xl bg-background"
-                                        style={{ textShadow: '0px 0px 3px rgba(255, 255, 255, 0.8)' }}
+                                        className="fill-foreground font-bold select-none pointer-events-none drop-shadow-md text-2xl bg-background animate-in fade-in duration-700"
+                                        style={{ textShadow: '0px 0px 3px rgba(255, 255, 255, 0.8)', animationDelay: `${index * 150 + 200}ms`, animationFillMode: 'both' }}
                                     >
                                         {facility.address}
                                     </text>
