@@ -1,7 +1,16 @@
 import { useState } from "react";
+import { Menu } from "lucide-react";
 import { InteractiveMap } from "./components/InteractiveMap";
 import { RegionModal } from "./components/RegionModal";
 import { AdminPage } from "./components/AdminPage";
+import { ThemeToggle } from "./components/theme-toggle";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "./components/ui/dropdown-menu";
+import { Button } from "./components/ui/button";
 import "../styles/globals.css"
 import vLogo from "./public/images/v_logo.png"
 export function App() {
@@ -25,17 +34,60 @@ export function App() {
     <div className="min-h-screen bg-background text-foreground flex flex-col font-sans ">
       {/* Navigation */}
       <nav className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className=" mx-auto px-4 h-16 flex items-center justify-between"><div className="p-"> <img src={vLogo} alt="Logo" width={150} /></div>
-
-          <div className="hidden md:flex items-center gap-6 text-sm font-medium text-muted-foreground">
-            <button onClick={() => setActiveTab("home")} className={`hover:text-primary transition-colors ${activeTab === 'home' ? 'text-primary' : ''}`}>Home</button>
-            <button onClick={() => setActiveTab("about")} className={`hover:text-primary transition-colors ${activeTab === 'about' ? 'text-primary' : ''}`}>About</button>
-            <button onClick={() => setActiveTab("centers")} className={`hover:text-primary transition-colors ${activeTab === 'centers' ? 'text-primary' : ''}`}>Centers</button>
+        <div className="mx-auto px-4 h-16 flex items-center justify-between">
+          {/* Logo */}
+          <div className="p-">
+            <img src={vLogo} alt="Logo" width={150} />
           </div>
-          <div className="flex items-center gap-4">
-            <button className="bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2 rounded-md text-sm font-medium transition-colors">
-              Get Started
+
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center gap-6 text-sm font-medium text-muted-foreground">
+            <button
+              onClick={() => setActiveTab("home")}
+              className={`hover:text-primary transition-colors ${activeTab === 'home' ? 'text-primary' : ''}`}
+            >
+              Home
             </button>
+            <button
+              onClick={() => setActiveTab("about")}
+              className={`hover:text-primary transition-colors ${activeTab === 'about' ? 'text-primary' : ''}`}
+            >
+              About
+            </button>
+            <button
+              onClick={() => setActiveTab("centers")}
+              className={`hover:text-primary transition-colors ${activeTab === 'centers' ? 'text-primary' : ''}`}
+            >
+              Centers
+            </button>
+          </div>
+
+          {/* Theme Toggle and Mobile Menu */}
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+
+            {/* Mobile Menu */}
+            <div className="md:hidden">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="icon">
+                    <Menu className="h-[1.2rem] w-[1.2rem]" />
+                    <span className="sr-only">Toggle menu</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={() => setActiveTab("home")}>
+                    Home
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setActiveTab("about")}>
+                    About
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setActiveTab("centers")}>
+                    Centers
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
           </div>
         </div>
       </nav>
