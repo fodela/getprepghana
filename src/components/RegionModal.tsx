@@ -70,12 +70,12 @@ export function RegionModal({ isOpen, onClose, regionId, regionName, pathData }:
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4" onClick={onClose}>
-            <div className="bg-background rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col md:flex-row" onClick={e => e.stopPropagation()}>
+            <div className="bg-background rounded-xl shadow-2xl w-full max-w-4xl h-[85vh] md:h-auto md:max-h-[90vh] overflow-hidden flex flex-col md:flex-row" onClick={e => e.stopPropagation()}>
 
                 {/* Left: Region Map */}
-                <div className="w-full md:w-1/2 bg-muted/10 p-8 flex items-center justify-center relative min-h-[300px]">
-                    <h2 className="absolute top-4 left-4 text-2xl font-bold text-primary">{regionName}</h2>
-                    <svg className="w-full h-full max-h-[400px] drop-shadow-lg" viewBox="0 0 625 910">
+                <div className="w-full md:w-1/2 bg-muted/10 p-4 md:p-8 flex items-center justify-center relative min-h-[250px] md:min-h-[400px] shrink-0">
+                    <h2 className="absolute top-4 left-4 text-xl md:text-2xl font-bold text-primary">{regionName}</h2>
+                    <svg className="w-full h-full max-h-[300px] md:max-h-[400px] drop-shadow-lg" viewBox="0 0 625 910">
                         <path d={pathData} className="fill-primary/20 stroke-primary stroke-2" />
 
                         {/* Render Facility Pins */}
@@ -99,6 +99,15 @@ export function RegionModal({ isOpen, onClose, regionId, regionName, pathData }:
                                                 facility.drug_status === 'low' ? 'fill-yellow-500' : 'fill-primary'
                                             } ${isSelected ? 'stroke-4 shadow-lg' : ''}`}
                                     />
+                                    <text
+                                        x={x}
+                                        y={y - 12}
+                                        textAnchor="middle"
+                                        className="fill-foreground text-xs font-bold select-none pointer-events-none drop-shadow-md bg-background"
+                                        style={{ textShadow: '0px 0px 3px rgba(255, 255, 255, 0.8)' }}
+                                    >
+                                        {facility.address}
+                                    </text>
                                     <title>{facility.name}</title>
                                 </g>
                             );
@@ -107,12 +116,12 @@ export function RegionModal({ isOpen, onClose, regionId, regionName, pathData }:
                 </div>
 
                 {/* Right: Content Area */}
-                <div className="w-full md:w-1/2 p-6 overflow-y-auto bg-card">
-                    <div className="flex items-center justify-between mb-6">
+                <div className="w-full md:w-1/2 p-6 overflow-y-auto bg-card flex-1">
+                    <div className="flex items-center justify-between mb-6 sticky top-0 bg-card z-10 pb-2 border-b border-border/50">
                         <h3 className="text-xl font-semibold">
                             {selectedFacility ? "Facility Details" : "Facilities"}
                         </h3>
-                        <button onClick={onClose} className="text-muted-foreground hover:text-foreground">
+                        <button onClick={onClose} className="text-muted-foreground hover:text-foreground p-1 hover:bg-accent rounded-full transition-colors">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg>
                         </button>
                     </div>
@@ -121,7 +130,7 @@ export function RegionModal({ isOpen, onClose, regionId, regionName, pathData }:
                         <div className="text-center py-12 text-muted-foreground">Loading facilities...</div>
                     ) : selectedFacility ? (
                         // Detailed View
-                        <div className="animate-in slide-in-from-right duration-300">
+                        <div className="animate-in slide-in-from-right duration-300 pb-4">
                             <button
                                 onClick={() => setSelectedFacility(null)}
                                 className="flex items-center text-sm text-muted-foreground hover:text-primary mb-4 transition-colors"
@@ -192,7 +201,7 @@ export function RegionModal({ isOpen, onClose, regionId, regionName, pathData }:
                         <div className="text-center py-12 text-muted-foreground">No facilities found in this region.</div>
                     ) : (
                         // List View
-                        <div className="space-y-4 animate-in fade-in duration-300">
+                        <div className="space-y-4 animate-in fade-in duration-300 pb-4">
                             {facilities.map(facility => (
                                 <div
                                     key={facility.id}

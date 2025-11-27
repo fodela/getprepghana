@@ -8,6 +8,7 @@ interface InteractiveMapProps {
 
 export function InteractiveMap({ activeRegion, onRegionClick }: InteractiveMapProps) {
     const [svgContent, setSvgContent] = useState<string | null>(null);
+    const [hoveredRegion, setHoveredRegion] = useState<{ name: string, x: number, y: number } | null>(null);
 
     useEffect(() => {
         const fetchMap = async () => {
@@ -80,25 +81,48 @@ export function InteractiveMap({ activeRegion, onRegionClick }: InteractiveMapPr
     if (!finalSvg) return <div className="w-full h-64 flex items-center justify-center text-muted-foreground">Loading map...</div>;
 
     return (
-        <div
-            className=" h-auto w-auto filter drop-shadow-xl"
-            dangerouslySetInnerHTML={{ __html: finalSvg }}
-            onClick={(e) => {
-                // Event delegation for clicks
-                const target = e.target as HTMLElement;
-                const path = target.closest('path');
-                if (path) {
-                    const regionId = path.id;
-                    const regionName = path.getAttribute('name') || regionId;
-                    const pathData = path.getAttribute('d') || "";
+        <>
+            <div
+                className=" h-auto w-auto filter drop-shadow-xl relative"
+                dangerouslySetInnerHTML={{ __html: finalSvg }}
+                onClick={(e) => {
+                    // Event delegation for clicks
+                    const target = e.target as HTMLElement;
+                    const path = target.closest('path');
+                    if (path) {
+                        const regionId = path.id;
+                        const regionName = path.getAttribute('name') || regionId;
+                        const pathData = path.getAttribute('d') || "";
 
-                    console.log("Clicked Region:", regionId, regionName);
+                        console.log("Clicked Region:", regionId, regionName);
 
-                    if (regionId && onRegionClick) {
-                        onRegionClick(regionId, regionName, pathData);
+                        if (regionId && onRegionClick) {
+                            onRegionClick(regionId, regionName, pathData);
+                        }
                     }
-                }
-            }}
-        />
+                }}
+                onMouseMove={(e) => {
+                    const target = e.target as HTMLElement;
+                    const path = target.closest('path');
+                    if (path) {
+                        const name = path.getAttribute('name');
+                        if (name) {
+                            setHoveredRegion({ name, x: e.clientX, y: e.clientY });
+                            return;
+                        }
+                    }
+                    setHoveredRegion(null);
+                }}
+                onMouseLeave={() => setHoveredRegion(null)}
+            />
+            {hoveredRegion && (
+                <div
+                    style={{ top: hoveredRegion.y - 40, left: hoveredRegion.x }}
+                    className="fixed z-50 bg-popover text-popover-foreground px-3 py-1.5 rounded-md shadow-md text-sm font-bold pointer-events-none transform -translate-x-1/2 border border-border animate-in fade-in duration-200"
+                >
+                    {hoveredRegion.name}
+                </div>
+            )}
+        </>
     );
 }
