@@ -2,6 +2,7 @@ import { useState } from "react";
 import { InteractiveMap } from "./components/InteractiveMap";
 import { RegionModal } from "./components/RegionModal";
 import "../styles/globals.css"
+import vLogo from "./public/images/v_logo.png"
 export function App() {
   const [activeTab, setActiveTab] = useState("home");
   const [modalOpen, setModalOpen] = useState(false);
@@ -16,13 +17,8 @@ export function App() {
     <div className="min-h-screen bg-background text-foreground flex flex-col font-sans ">
       {/* Navigation */}
       <nav className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className=" mx-auto px-4 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-lg">P</span>
-            </div>
-            <span className="text-xl font-bold tracking-tight text-primary">PrEP Ghana</span>
-          </div>
+        <div className=" mx-auto px-4 h-16 flex items-center justify-between"><div className="p-"> <img src={vLogo} alt="Logo" width={150} /></div>
+
           <div className="hidden md:flex items-center gap-6 text-sm font-medium text-muted-foreground">
             <button onClick={() => setActiveTab("home")} className={`hover:text-primary transition-colors ${activeTab === 'home' ? 'text-primary' : ''}`}>Home</button>
             <button onClick={() => setActiveTab("about")} className={`hover:text-primary transition-colors ${activeTab === 'about' ? 'text-primary' : ''}`}>About</button>
