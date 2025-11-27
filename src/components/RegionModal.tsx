@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 
 interface Facility {
     id: number;
@@ -24,10 +24,17 @@ export function RegionModal({ isOpen, onClose, regionId, regionName, pathData }:
     const [facilities, setFacilities] = useState<Facility[]>([]);
     const [loading, setLoading] = useState(false);
     const [selectedFacility, setSelectedFacility] = useState<Facility | null>(null);
+    const [viewBox, setViewBox] = useState("0 0 625 910");
+    const [isZoomed, setIsZoomed] = useState(false);
+    const pathRef = useRef<SVGPathElement>(null);
 
     useEffect(() => {
         if (isOpen && regionId) {
             setLoading(true);
+            // Reset zoom state
+            setIsZoomed(false);
+            setViewBox("0 0 625 910");
+
             fetch(`/api/facilities?region=${regionId}`)
                 .then(res => res.json())
                 .then(data => {
@@ -40,6 +47,66 @@ export function RegionModal({ isOpen, onClose, regionId, regionName, pathData }:
                 });
         }
     }, [isOpen, regionId]);
+
+    // Zoom Animation Effect
+    useEffect(() => {
+        if (isOpen && pathRef.current) {
+            // Small timeout to ensure DOM is ready and layout is calculated
+            const timer = setTimeout(() => {
+                if (!pathRef.current) return;
+
+                try {
+                    const bbox = pathRef.current.getBBox();
+
+                    // Calculate target viewBox with padding
+                    // We want to zoom in but keep some context
+                    const paddingX = bbox.width * 0.5;
+                    const paddingY = bbox.height * 0.5;
+
+                    // Ensure we don't zoom out if the region is huge (unlikely for regions vs whole country)
+                    // and constrain to the map bounds roughly
+                    const targetX = Math.max(0, bbox.x - paddingX / 2);
+                    const targetY = Math.max(0, bbox.y - paddingY / 2);
+                    const targetWidth = bbox.width + paddingX;
+                    const targetHeight = bbox.height + paddingY;
+
+                    const start = { x: 0, y: 0, w: 625, h: 910 };
+                    const end = { x: targetX, y: targetY, w: targetWidth, h: targetHeight };
+
+                    const startTime = performance.now();
+                    const duration = 1000; // 1s zoom
+
+                    const animate = (time: number) => {
+                        const elapsed = time - startTime;
+                        const progress = Math.min(elapsed / duration, 1);
+                        // Cubic ease out
+                        const ease = 1 - Math.pow(1 - progress, 3);
+
+                        const currentX = start.x + (end.x - start.x) * ease;
+                        const currentY = start.y + (end.y - start.y) * ease;
+                        const currentW = start.w + (end.w - start.w) * ease;
+                        const currentH = start.h + (end.h - start.h) * ease;
+
+                        setViewBox(`${currentX} ${currentY} ${currentW} ${currentH}`);
+
+                        if (progress < 1) {
+                            requestAnimationFrame(animate);
+                        } else {
+                            setIsZoomed(true);
+                        }
+                    };
+
+                    requestAnimationFrame(animate);
+                } catch (e) {
+                    console.error("Animation error:", e);
+                    // Fallback
+                    setIsZoomed(true);
+                }
+            }, 100);
+
+            return () => clearTimeout(timer);
+        }
+    }, [isOpen, regionId, pathData]);
 
     // Reset selected facility when modal closes or region changes
     useEffect(() => {
@@ -75,17 +142,18 @@ export function RegionModal({ isOpen, onClose, regionId, regionName, pathData }:
                 {/* Left: Region Map */}
                 <div className="w-full md:w-1/2 bg-muted/10 p-4 md:p-8 flex items-center justify-center relative min-h-[250px] md:min-h-[400px] shrink-0">
                     <h2 className="absolute top-4 left-4 text-xl md:text-2xl font-bold text-primary">{regionName}</h2>
-                    <svg className="w-full h-full max-h-[300px] md:max-h-[400px] drop-shadow-lg" viewBox="0 0 625 910">
-                        <path d={pathData} className="fill-primary/20 stroke-primary stroke-2" />
+                    <svg className="w-full h-full max-h-[300px] md:max-h-[400px] drop-shadow-lg transition-all duration-1000" viewBox={viewBox}>
+                        <path ref={pathRef} d={pathData} className="fill-primary/20 stroke-primary stroke-2" />
 
                         {/* Render Facility Pins */}
-                        {facilities.map(facility => {
+                        {isZoomed && facilities.map((facility, index) => {
                             const { x, y } = projectPoint(facility.latitude, facility.longitude);
                             const isSelected = selectedFacility?.id === facility.id;
                             return (
                                 <g
                                     key={facility.id}
-                                    className="cursor-pointer group"
+                                    className="cursor-pointer group animate-in zoom-in fade-in slide-in-from-bottom-4 duration-500"
+                                    style={{ animationDelay: `${index * 150}ms`, animationFillMode: 'both' }}
                                     onClick={(e) => {
                                         e.stopPropagation();
                                         setSelectedFacility(facility);
