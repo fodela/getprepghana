@@ -11,10 +11,10 @@
   --card-foreground: hsl(0 0% 12.5490%);
   --popover: hsl(0 0% 98.8235%);
   --popover-foreground: hsl(0 0% 12.5490%);
-  --primary: hsl(198.6207 100% 34.1176%);
+  --primary: hsl(192.3967 66.8508% 35.4902%);
   --primary-foreground: hsl(0 0% 100%);
-  --secondary: hsl(189.5745 63.5135% 70.9804%);
-  --secondary-foreground: hsl(0 0% 0%);
+  --secondary: hsl(20.9836 72.3320% 49.6078%);
+  --secondary-foreground: hsl(0 0% 100%);
   --muted: hsl(0 0% 93.7255%);
   --muted-foreground: hsl(0 0% 39.2157%);
   --accent: hsl(0 0% 90.9804%);
@@ -66,9 +66,9 @@
   --card-foreground: hsl(0 0% 93.3333%);
   --popover: hsl(0 0% 9.8039%);
   --popover-foreground: hsl(0 0% 93.3333%);
-  --primary: hsl(198.6207 100% 34.1176%);
+  --primary: hsl(192.3967 66.8508% 35.4902%);
   --primary-foreground: hsl(190 20.0000% 94.1176%);
-  --secondary: hsl(28.2353 17.5258% 19.0196%);
+  --secondary: hsl(20.4324 73.1225% 50.3922%);
   --secondary-foreground: hsl(29.5082 100% 88.0392%);
   --muted: hsl(0 0% 13.3333%);
   --muted-foreground: hsl(0 0% 70.5882%);
@@ -163,6 +163,7 @@
   --shadow-lg: var(--shadow-lg);
   --shadow-xl: var(--shadow-xl);
   --shadow-2xl: var(--shadow-2xl);
+
 
   @keyframes accordion-down {
     from {

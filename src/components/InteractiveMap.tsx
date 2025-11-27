@@ -52,43 +52,21 @@ export function InteractiveMap({ activeRegion, onRegionClick }: InteractiveMapPr
     const getProcessedSvg = () => {
         if (!svgContent) return null;
 
-        // 1. Remove any existing fill colors if present (the file has fill="#6f9c76")
+        // Remove any existing fill colors so classes can take effect
         let processed = svgContent.replace(/fill="[^"]*"/g, '');
 
-        // 2. Add base classes to all paths
-        // We look for <path and add class="..."
-        // We also need to ensure we don't break existing attributes.
-        // The file has <path d="..." id="..." name="...">
-
-        // We want to inject: className="fill-accent hover:fill-secondary transition-colors duration-300 cursor-pointer"
-        // BUT for the active region, we want "fill-primary ..."
-
-        // We can do a global replace to add the common classes.
-        // And then a specific replace for the active ID.
+        // Replace the SVG tag with the desired attributes exactly as requested
+        processed = processed.replace(/<svg[^>]*>/, '<svg class="h-full w-full" width="auto" height="910" viewBox="0 0 625 910" xmlns="http://www.w3.org/2000/svg">');
 
         const baseClass = "fill-accent hover:fill-secondary transition-colors duration-300 cursor-pointer";
         const activeClass = "fill-primary hover:fill-secondary transition-colors duration-300 cursor-pointer";
 
-        // Replace <path with <path class="BASE_CLASS"
-        // Note: SVG uses 'class' attribute, not 'className' when string injected.
+        // Inject base class into all paths
         processed = processed.replace(/<path/g, `<path class="${baseClass}"`);
 
-        // Now find the active region and replace its class.
-        // We look for id="ACTIVE_ID" ... class="BASE_CLASS" (order might vary)
-        // Or easier: just replace the specific ID's class.
-        // We know we just added class="${baseClass}" right after <path.
-        // So we can look for `<path class="${baseClass}" ... id="${activeRegion}"`
-        // Regex is tricky because attributes order is unknown.
-
-        // Alternative: Split by id="activeRegion" and replace the class before it?
-        // Let's try to be specific if possible.
-        // The file format is consistent: <path d="..." id="GHxx" name="...">
-
+        // Handle active region if specified
         if (activeRegion) {
-            // We can use a regex that finds the path with the specific ID
-            // and replaces the previously added base class with the active class.
-            // Since we prepended the class, it's `<path class="BASE" ... id="ACTIVE" ...`
-            // We can match `<path class="${baseClass}"([^>]*?)id="${activeRegion}"`
+            // We look for the path that now has the base class and the matching ID
             const activeRegex = new RegExp(`<path class="${baseClass}"([^>]*?)id="${activeRegion}"`, "g");
             processed = processed.replace(activeRegex, `<path class="${activeClass}"$1id="${activeRegion}"`);
         }
@@ -102,7 +80,8 @@ export function InteractiveMap({ activeRegion, onRegionClick }: InteractiveMapPr
 
     return (
         <div
-            className="w-full h-auto filter drop-shadow-xl"
+            className=" h-auto w-auto filter drop-shadow-xl"
+            // viewBox="200 100 600 800"
             dangerouslySetInnerHTML={{ __html: finalSvg }}
             onClick={(e) => {
                 // Event delegation for clicks
