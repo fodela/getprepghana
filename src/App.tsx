@@ -1,8 +1,16 @@
 import { useState } from "react";
 import { InteractiveMap } from "./components/InteractiveMap";
+import { RegionModal } from "./components/RegionModal";
 import "../styles/globals.css"
 export function App() {
   const [activeTab, setActiveTab] = useState("home");
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedRegion, setSelectedRegion] = useState<{ id: string, name: string, path: string } | null>(null);
+
+  const handleRegionClick = (regionId: string, regionName: string, pathData: string) => {
+    setSelectedRegion({ id: regionId, name: regionName, path: pathData });
+    setModalOpen(true);
+  };
 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col font-sans ">
@@ -81,7 +89,10 @@ export function App() {
 
             <div className="flex items-center justify-center">
               <div className=" rounded-full blur-3xl -z-10" />
-              <InteractiveMap activeRegion="EASTERN" />
+              <InteractiveMap
+                activeRegion="GREATER_ACCRA"
+                onRegionClick={handleRegionClick}
+              />
             </div>
           </div>
         </section>
@@ -93,6 +104,14 @@ export function App() {
           <p>&copy; {new Date().getFullYear()} GetPrEPGhana. All rights reserved.</p>
         </div>
       </footer>
+
+      <RegionModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        regionId={selectedRegion?.id || ""}
+        regionName={selectedRegion?.name || ""}
+        pathData={selectedRegion?.path || ""}
+      />
     </div>
   );
 }
