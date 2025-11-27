@@ -10,7 +10,8 @@
       "WebFetch(domain:www.healthysexuals.com)",
       "WebFetch(domain:www.talk-prep.com)",
       "WebFetch(domain:prepdaily.org)",
-      "WebFetch(domain:www.iwantprepnow.co.uk)"
+      "WebFetch(domain:www.iwantprepnow.co.uk)",
+      "Bash(bun add:*)"
     ],
     "deny": [],
     "ask": []

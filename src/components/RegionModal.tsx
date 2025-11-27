@@ -256,7 +256,7 @@ export function RegionModal({ isOpen, onClose, regionId, regionName, pathData }:
                                         x={layout.x}
                                         y={layout.y}
                                         textAnchor={layout.anchor as "middle" | "start" | "end"}
-                                        className="fill-foreground font-bold select-none pointer-events-none drop-shadow-md text-2xl bg-background animate-in fade-in duration-700"
+                                        className="fill-foreground font-bold select-none pointer-events-none drop-shadow-md text-lg lg:text-2xl bg-background animate-in fade-in duration-700"
                                         style={{ textShadow: '0px 0px 3px rgba(255, 255, 255, 0.8)', animationDelay: `${index * 150 + 200}ms`, animationFillMode: 'both' }}
                                     >
                                         {facility.address}
