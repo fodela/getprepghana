@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { InteractiveMap } from "./components/InteractiveMap";
 import { RegionModal } from "./components/RegionModal";
+import { AdminPage } from "./components/AdminPage";
 import "../styles/globals.css"
 import vLogo from "./public/images/v_logo.png"
 export function App() {
@@ -8,10 +9,17 @@ export function App() {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedRegion, setSelectedRegion] = useState<{ id: string, name: string, path: string } | null>(null);
 
+
+
   const handleRegionClick = (regionId: string, regionName: string, pathData: string) => {
     setSelectedRegion({ id: regionId, name: regionName, path: pathData });
     setModalOpen(true);
   };
+
+  // Simple client-side routing for admin page
+  if (typeof window !== 'undefined' && window.location.pathname === '/admin') {
+    return <AdminPage />;
+  }
 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col font-sans ">
