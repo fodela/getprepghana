@@ -1,4 +1,5 @@
 import db from "./index";
+import "./setup";
 
 console.log("Seeding database...");
 
